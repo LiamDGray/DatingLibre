@@ -1,0 +1,63 @@
+dating_libre_app:
+    contact: 'admin@datinglibre.com'
+    site_name: 'Dating Libre'
+    site_description: 'Description of the site'
+    admin_email: '"Dating Libre Staging" <admin@example.com>'
+    images_bucket: dlibreim
+    image_upload: true
+    is_demo: false
+    banner_unauthenticated:
+        active: true
+        message: "This is a demonstration of a temporary message intended for unauthenticated users"
+    banner_authenticated:
+        active: false
+        message: "This is a demonstration of a temporary message intended for authenticated users"
+    # the values below are limited to alphanumeric characters
+    # separated by an underscore. They are used in behat tests
+    # and as translation keys. Ansible will generate and run
+    # SQL to automatically add them to the database.
+    categories:
+        - color
+        - shape
+    attributes:
+        color:
+            - blue
+            - green
+            - yellow
+        shape:
+            - square
+            - circle
+            - triangle
+    interests:
+        - north
+        - south
+        - east
+        - west
+    rules:
+        ROLE_USER:
+            - spam
+            - abusive_messages
+            - offsite_linking
+        ROLE_MODERATOR:
+            - spam
+            - abusive_messages
+            - offsite_linking
+        ROLE_ADMIN:
+            - spam
+            - abusive_messages
+            - offsite_linking
+            - chargeback
+    supported_countries:
+        - 9ae4610f-4bb2-4fd6-808e-ab48505feb82
+        - 74ea9d81-aad1-48b7-94b8-98be73d8ec1a
+    first_message_require_subscription: true
+    testing_user_email_addresses:
+        - admin@datinglibre.com
+    randomize_unmoderated_images: true
+    storage:
+        timeout: 8
+        connect_timeout: 5
+    profile_image:
+        width: 250
+        height: 250
+

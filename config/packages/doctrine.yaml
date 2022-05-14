@@ -1,0 +1,37 @@
+doctrine:
+    dbal:
+        types:
+            text[]: MartinGeorgiev\Doctrine\DBAL\Types\TextArray
+        default_connection: default
+        connections:
+            default:
+                driver: 'pdo_pgsql'
+                server_version: '13.3'
+                charset: utf8
+                url: '%env(resolve:DATABASE_URL)%'
+                mapping_types:
+                    text[]: text[]
+                    _text: text[]
+                options:
+                    # Don't use PDO::ATTR_EMULATE_PREPARES
+                    # pgbouncer is setup to pool sessions,
+                    # not transactions, so supports prepared
+                    # statements.
+                    # If pgbouncer is reconfigured to pool
+                    # transactions, an alternative to turning
+                    # off prepared statements should be
+                    # explored, such as binary_parameters mode,
+                    # as prepared statements are preferable
+                    # to emulation.
+                    20: false
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App

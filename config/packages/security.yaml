@@ -1,0 +1,45 @@
+security:
+    enable_authenticator_manager: true
+    hide_user_not_found: true
+    password_hashers:
+        DatingLibre\AppBundle\Entity\User:
+            algorithm: auto
+    providers:
+        app_user_provider:
+            entity:
+                class: DatingLibre\AppBundle\Entity\User
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            form_login:
+                login_path: index
+                check_path: login
+                username_parameter: 'email'
+                password_parameter: 'password'
+                enable_csrf: true
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: login
+                secure: true
+                samesite: strict
+            logout:
+                path: logout
+    access_control:
+        - { path: ^/(%datinglibre.locales_pattern%)/admin, roles: ROLE_ADMIN}
+        - { path: ^/(%datinglibre.locales_pattern%)/admin, roles: ROLE_NO_ACCESS }
+        - { path: ^/admin, roles: ROLE_NO_ACCESS }
+        - { path: ^/(%datinglibre.locales_pattern%)/moderator, roles: [ROLE_ADMIN, ROLE_MODERATOR]}
+        - { path: ^/(%datinglibre.locales_pattern%)/moderator, roles: [ ROLE_NO_ACCESS ] }
+        - { path: ^/moderator, roles: ROLE_NO_ACCESS }
+        - { path: ^/(%datinglibre.locales_pattern%)/user, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/(%datinglibre.locales_pattern%)/user, roles: ROLE_NO_ACCESS }
+        - { path: ^/user, roles: ROLE_NO_ACCESS }
+        - { path: ^/webhook/verotel, roles: PUBLIC_ACCESS, ips: [ 195.20.32.202/32, 89.185.232.210/32, 83.223.52.202/32 ] }
+        - { path: ^/webhook/ccbill, roles: PUBLIC_ACCESS, ips: [ 64.38.212.0/24, 64.38.215.0/24, 64.38.240.0/24, 64.38.241.0/24 ] }
+        - { path: ^/webhook, roles: ROLE_NO_ACCESS }
+
+

@@ -1,0 +1,43 @@
+image: datinglibre/ci:latest
+
+services:
+  - name: postgis/postgis:14-3.1-alpine
+    alias: postgresql
+  - name: mailhog/mailhog
+    alias: mailhog
+  - name: scireum/s3-ninja:7.0.1
+    alias: s3ninja
+
+variables:
+  POSTGRES_DB: datinglibre
+  POSTGRES_USER: datinglibre
+  POSTGRES_PASSWORD: secret
+  DATABASE_URL: postgresql://datinglibre:secret@postgresql:5432/datinglibre
+  MAILER_DSN: smtp://mailhog:1025
+  STORAGE_ENDPOINT: http://s3ninja:9000/s3
+  MAILER_HOST: mailhog
+  STORAGE_HOST: s3ninja
+
+stages:
+  - test
+
+test-job:
+  variables:
+    GIT_CHECKOUT: "true"
+  only:
+    - master
+  except:
+    changes:
+      - "**/*.md"
+      - "deploy/**"
+      - "**.jmx"
+  stage: test
+  script:
+    - google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=1024,768 --disable-gpu > /dev/null 2>&1 &
+    - cd /builds/datinglibre/datinglibre && composer install
+    - cd /builds/datinglibre/datinglibre && npm install && npm run build
+    - cd /builds/datinglibre/datinglibre && echo 'drop schema if exists datinglibre cascade; create schema datinglibre; ' | PGPASSWORD=secret psql -h postgresql --user datinglibre datinglibre
+    - cd /builds/datinglibre/datinglibre && php bin/console doctrine:migrations:migrate --no-interaction
+    - cd /builds/datinglibre/datinglibre && php bin/console doctrine:fixtures:load --append --no-interaction
+    - cd /builds/datinglibre/datinglibre && symfony serve --port 8000 --no-tls --daemon
+    - cd /builds/datinglibre/datinglibre && ./vendor/bin/behat 

@@ -1,0 +1,26 @@
+/var/www/datinglibre/var/log/prod.log {
+        daily
+        missingok
+        rotate {{ production_log_rotate }}
+        notifempty
+        compress
+        create 0640 datinglibre datinglibre
+}
+
+/var/www/datinglibre/var/log/prod.deprecations.log {
+        daily
+        missingok
+        rotate {{ deprecations_log_rotate }}
+        notifempty
+        compress
+        create 0640 datinglibre datinglibre
+}
+
+/var/www/datinglibre/var/log/security.log {
+        daily
+        missingok
+        rotate {{ security_log_rotate }}
+        notifempty
+        compress
+        create 0640 datinglibre datinglibre
+}

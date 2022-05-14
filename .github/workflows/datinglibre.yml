@@ -1,0 +1,109 @@
+name: DatingLibre GitHub CI
+on:
+  push:
+    branches:
+      - master
+      - 'releases/**'
+    paths-ignore:
+      - '**/README.md'
+      - 'deploy/**'
+      - '**.jmx'
+jobs:
+  build:
+    name: Symfony (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgis/postgis:14-3.1-alpine
+        env:
+          POSTGRES_USER: datinglibre
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: datinglibre
+        ports:
+          - 5432:5432
+      mailhog:
+        image: mailhog/mailhog
+        ports:
+          - 1025:1025
+          - 8025:8025
+        env:
+          MH_STORAGE: memory
+      s3ninja:
+        image: scireum/s3-ninja:7.0.1
+        ports:
+          - 9000:9000
+    strategy:
+      fail-fast: true
+      matrix:
+        php-versions: ['8.1']
+    steps:
+      - name: Setup npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install postgresql-client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-client
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          ini-values: opcache.enable=1, opcache.enable_cli=1, opcache.memory_consumption=256, opcache.max_accelerated_files=32531, opcache.validate_timestamps=0, opcache.save_comments=1, opcache.fast_shutdown=0
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_pgsql, dom, filter, gd, iconv, json, mbstring, pdo, snmp
+          tools: symfony
+        env:
+          update: true
+
+      - name: Run Chrome headless
+        run: google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=1024,768  https://127.0.0.1 > /dev/null 2>&1 &
+
+      - name: Check PHP version
+        run: php -v
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Setup fixtures
+        run: |
+          echo 'drop schema if exists datinglibre cascade; create schema datinglibre; ' | PGPASSWORD=secret psql -h localhost --user datinglibre datinglibre
+          php bin/console doctrine:migrations:migrate --no-interaction
+          php bin/console doctrine:fixtures:load --append --no-interaction
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          DATABASE_URL: postgresql://datinglibre:secret@localhost:5432/datinglibre
+
+      - name: Install Javascript and CSS dependencies
+        run: npm install
+
+      - name: Build Javascript and CSS assets
+        run: npm run build
+
+      - name: Start symfony server
+        run: symfony serve --port 8000 --no-tls --daemon
+
+      - name: Run behat tests
+        run: ./vendor/bin/behat
+
+      - name: Stop symfony server
+        run: symfony server:stop

@@ -1,0 +1,5 @@
+# This file can be deleted in production installations using a managed database
+postgis_version: 3
+database_certificate_path: /var/lib/postgresql/{{ postgresql_version }}/main/server.crt
+database_root_certificate_path: /var/lib/postgresql/{{ postgresql_version }}/main/root.crt
+database_key_path: /var/lib/postgresql/{{ postgresql_version }}/main/server.key

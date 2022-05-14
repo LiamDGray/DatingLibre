@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgis/postgis:14-3.1-alpine
+    restart: always
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: datinglibre
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: datinglibre
+    volumes: 
+    - ./docker/docker-entrypoint-initdb.d/create_dating_libre_schema.sql:/docker-entrypoint-initdb.d/create_dating_libre_schema.sql
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+    - "1025:1025"
+    - "8025:8025"
+    environment:
+      MH_STORAGE: memory
+  s3ninja:
+    restart: always
+    image: scireum/s3-ninja:7.1.1
+    ports:
+    - "9000:9000"

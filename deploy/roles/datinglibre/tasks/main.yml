@@ -1,0 +1,380 @@
+---
+- name: Include datinglibre vars
+  include_vars: ../../../../config/packages/dating_libre.yaml
+
+- name: Add key for postgresql repo
+  become: True
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+
+- name: Add postgresql repository to sources list
+  become: True
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ {{ postgresql_ubuntu_version }}-pgdg main' state=present update_cache=yes
+
+- name: Install postgresql client
+  become: True
+  apt:
+    name: ['postgresql-client-{{ postgresql_version }}']
+
+- name: Add datinglibre group
+  become: true
+  group:
+    name: datinglibre
+    state: present
+
+- name: Add datinglibre user
+  become: true
+  user:
+    name: datinglibre
+    groups: datinglibre
+    append: yes
+    skeleton: "/etc/skel"
+    createhome: yes
+    shell: /bin/bash
+
+- name: Add www-data to datinglibre group
+  become: true
+  user:
+    name: www-data
+    groups: datinglibre
+    append: yes
+
+- name: Update php-fpm global settings
+  become: true
+  lineinfile:
+    dest: /etc/php/{{ php_version }}/fpm/php-fpm.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - { regexp: "^;?process_control_timeout", line: "process_control_timeout = {{ php_fpm_process_control_timeout }}" }
+  notify: restart php-fpm
+
+- name: Update PHP FPM to use datinglibre user
+  become: true
+  lineinfile:
+    dest: /etc/php/{{ php_version }}/fpm/pool.d/www.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - { regexp: "^user = www-data", line: "user = datinglibre" }
+    - { regexp: "^group = www-data", line: "group = datinglibre" }
+    - { regexp: "^listen.group = www-data", line: "listen.group = datinglibre" }
+    - { regexp: "^listen.owner = www-data", line: "listen.owner = datinglibre" }
+  notify: restart php-fpm
+
+- name: Set PHP FPM pool sizes
+  become: true
+  lineinfile:
+    dest: /etc/php/{{ php_version }}/fpm/pool.d/www.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - { regexp: "^pm = ", line: "pm = {{ php_fpm_pm }}" }
+    - { regexp: "^pm.max_children", line: "pm.max_children = {{ php_fpm_pm_max_children }}" }
+    - { regexp: "^pm.start_servers", line: "pm.start_servers = {{ php_fpm_pm_start_servers }}" }
+    - { regexp: "^pm.min_spare_servers", line: "pm.min_spare_servers = {{ php_fpm_pm_min_spare_servers }}" }
+    - { regexp: "^pm.max_spare_servers", line: "pm.max_spare_servers = {{ php_fpm_pm_max_spare_servers }}" }
+    - { regexp: "^;?pm.max_requests", line: "pm.max_requests = {{ php_fpm_pm_max_requests }}" }
+  notify: restart php-fpm
+
+- meta: flush_handlers
+
+- name: Create datinglibre directory
+  become: true
+  file:
+    path: /var/www/datinglibre
+    state: directory
+    owner: datinglibre
+    group: www-data
+
+- name: Create datinglibre config directory
+  become: true
+  file:
+    path: /etc/datinglibre
+    state: directory
+    owner: datinglibre
+    group: www-data
+    mode: 0750
+
+- name: Create datinglibre .postgresql directory
+  become: true
+  file:
+    path: /home/datinglibre/.postgresql
+    state: directory
+    owner: datinglibre
+    group: www-data
+    mode: 0750
+
+- name: Copy database root certificate
+  become: true
+  copy:
+    content: "{{ database_root_certificate }}"
+    dest: "{{ database_root_certificate_path }}"
+    owner: datinglibre
+    group: www-data
+    mode: 0750
+
+- name: Copy website SSL certificate and key
+  become: true
+  copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { content: "{{ website_certificate }}", dest: "{{ website_certificate_path }}", mode: 644 }
+    - { content: "{{ website_key }}", dest: "{{ website_key_path }}", mode: 700 }
+  tags: ssl
+
+- name: Deploy datinglibre src
+  become: true
+  synchronize:
+    src: ../../../../src
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy datinglibre templates
+  become: true
+  synchronize:
+    src: ../../../../templates
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy datinglibre config
+  become: true
+  synchronize:
+    src: ../../../../config
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy datinglibre public
+  become: true
+  synchronize:
+    src: ../../../../public
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy datinglibre bin
+  become: true
+  synchronize:
+    src: ../../../../bin
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy composer.json
+  become: true
+  synchronize:
+    src: ../../../../composer.json
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy composer.lock
+  become: true
+  synchronize:
+    src: ../../../../composer.lock
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy symfony.lock
+  become: true
+  synchronize:
+    src: ../../../../symfony.lock
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy env.local
+  become: true
+  template:
+    src: ../templates/env.local.j2
+    dest: /var/www/datinglibre/.env.local
+    owner: datinglibre
+    group: datinglibre
+    mode: 0750
+  tags: sync
+
+- name: Deploy env
+  become: true
+  synchronize:
+    src: ../../../../.env
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Deploy translations
+  become: true
+  synchronize:
+    src: ../../../../translations
+    delete: yes
+    dest: /var/www/datinglibre
+  tags: sync
+
+- name: Run composer self-update
+  become: true
+  command: >
+    /usr/local/bin/composer self-update
+  tags: sync
+
+- name: Composer install (can take several minutes)
+  become: true
+  become_user: datinglibre
+  composer:
+    command: install
+    arguments: --no-dev --classmap-authoritative
+    working_dir: /var/www/datinglibre
+  tags: sync
+
+- name: Set ownership and permissions
+  become: true
+  file:
+    dest: /var/www/datinglibre
+    owner: datinglibre
+    group: datinglibre
+    recurse: yes
+    mode: "u=rwx,g=rx,o="
+  tags: sync
+
+- name: Run migrations
+  become: true
+  become_user: datinglibre
+  command: '/var/www/datinglibre/bin/console doctrine:migrations:migrate --no-interaction'
+  tags: sync
+
+- name: clear php opcache
+  become: True
+  service: name=php{{ php_version }}-fpm state=reloaded
+  tags: sync
+
+- name: Copy database configuration generated from dating_libre.yaml
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: datinglibre
+    group: datinglibre
+    mode: 0770
+  with_items:
+    - { src: "../templates/categories_and_attributes.sql.j2", dest: "/tmp/categories_and_attributes.sql" }
+    - { src: "../templates/interests.sql.j2", dest: "/tmp/interests.sql" }
+
+
+- name: Insert categories and attributes into database
+  become: true
+  become_user: datinglibre
+  shell: /var/www/datinglibre/bin/console dbal:run-sql "$(< /tmp/categories_and_attributes.sql)"
+  args:
+    executable: /bin/bash
+
+- name: Insert interests into database
+  become: true
+  become_user: datinglibre
+  shell: /var/www/datinglibre/bin/console dbal:run-sql "$(< /tmp/interests.sql)"
+  args:
+    executable: /bin/bash
+
+- name: Copy locations
+  become: true
+  copy:
+    src: "{{ item }}"
+    dest: /tmp/
+    owner: datinglibre
+    group: www-data
+    mode: 0750
+  with_items:
+    - ../locations/countries.sql
+    - ../locations/regions.sql
+    - ../locations/cities.sql
+
+- name: Insert countries into the database
+  become: true
+  become_user: datinglibre
+  shell: "{{ psql_client_connection }} < /tmp/countries.sql"
+  args:
+    executable: /bin/bash
+
+- name: Insert regions into the database
+  become: true
+  become_user: datinglibre
+  shell: "{{ psql_client_connection }} < /tmp/regions.sql"
+  args:
+    executable: /bin/bash
+
+- name: Insert cities into the database
+  become: true
+  become_user: datinglibre
+  shell: "{{ psql_client_connection }} < /tmp/cities.sql"
+  args:
+    executable: /bin/bash
+
+- name: Cleanup categories, attributes
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/categories_and_attributes.sql"
+    - "/tmp/interests.sql"
+    - "/tmp/cities.sql"
+    - "/tmp/regions.sql"
+    - "/tmp/countries.sql"
+
+- name: Copy webserver nginx conf
+  become: true
+  template:
+    src: ../templates/nginx/datinglibre.conf.j2
+    dest: /etc/nginx/conf.d/datinglibre.conf
+
+- name: restart nginx
+  become: true
+  service: name=nginx state=restarted
+
+- name: Install purge users cron
+  become: true
+  cron:
+    name: "Purge users"
+    minute: "*/5"
+    job: "/var/www/datinglibre/bin/console app:users:purge {{ purge_users_parameters }}"
+    user: datinglibre
+
+- name: Install purge user archives cron
+  become: true
+  cron:
+    name: "Purge user archives"
+    hour: "12"
+    minute: "30"
+    job: "/var/www/datinglibre/bin/console app:user_archives:purge {{ purge_user_archives_parameters }}"
+    user: datinglibre
+
+- name: Install refresh expired secure image urls cron
+  become: true
+  cron:
+    name: "Refresh expired image urls"
+    minute: "0"
+    job: "/var/www/datinglibre/bin/console app:secure_urls:refresh_image_urls"
+    user: datinglibre
+
+- name: Install expire manual subscriptions cron
+  become: true
+  cron:
+    name: "Expire manual subscriptions"
+    minute: "5"
+    hour: "0"
+    job: "/var/www/datinglibre/bin/console app:subscriptions:expire_manual_subscriptions"
+    user: datinglibre
+
+- name: Install symfony logrotate configuration
+  become: true
+  template:
+    src: ../templates/logrotate/datinglibre.j2
+    dest: /etc/logrotate.d/datinglibre
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,21 @@
+{% extends '@DatingLibreApp/unauthenticated.base.html.twig' %}
+{% block title %}{{ 'error.404'|trans }}{% endblock %}
+    {% block nav %}
+        {% if app.user %}
+            {% if is_granted('ROLE_USER') %}
+                {% from '@DatingLibreApp/user/nav.html.twig' import user_navigation %}
+                {{ user_navigation(0) }}
+            {% else %}
+                {% from '@DatingLibreApp/macros/admin.nav.html.twig' import admin_nav %}
+                {{ admin_nav(is_granted('ROLE_ADMIN')) }}
+            {% endif %}
+        {% else %}
+            {% include '@DatingLibreApp/unauthenticated/nav.html.twig' %}
+        {% endif %}
+    {% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>{{ 'error.page_not_found'|trans }}</h1>
+        <div class="alert alert-warning">{{ 'error.page_not_found_message'|trans }}</div>
+    </div>
+{% endblock %}

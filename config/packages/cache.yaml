@@ -1,0 +1,4 @@
+framework:
+    cache:
+        prefix_seed: datinglibre/datinglibre
+        app: cache.adapter.filesystem

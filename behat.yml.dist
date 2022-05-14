@@ -1,0 +1,44 @@
+default:
+    suites:
+        default:
+            contexts:
+                - DatingLibre\AppBundle\Behat\UserContext
+                - DatingLibre\AppBundle\Behat\AccountContext
+                - DatingLibre\AppBundle\Behat\RegistrationContext
+                - DatingLibre\AppBundle\Behat\ProfileContext
+                - DatingLibre\AppBundle\Behat\ProfileImageContext
+                - DatingLibre\AppBundle\Behat\SearchContext
+                - DatingLibre\AppBundle\Behat\BlockContext
+                - DatingLibre\AppBundle\Behat\ReportContext
+                - DatingLibre\AppBundle\Behat\MessageContext
+                - DatingLibre\AppBundle\Behat\ModerateContext
+                - DatingLibre\AppBundle\Behat\ImageContext
+                - DatingLibre\AppBundle\Behat\SubscriptionContext
+                - DatingLibre\AppBundle\Behat\SuspensionContext
+                - DatingLibre\AppBundle\Behat\SubscriptionEventContext
+                - DatingLibre\AppBundle\Behat\TranslationContext
+                - Behat\MinkExtension\Context\MinkContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension: ~
+        DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
+        Behat\MinkExtension:
+            base_url: "http://localhost:8000/"
+            files_path: "%paths.base%/features/resources"
+            default_session: symfony
+            javascript_session: chrome
+            browser_name: chrome
+            sessions:
+                chrome:
+                    chrome:
+                        api_url: "http://localhost:9222"
+                symfony:
+                    goutte:
+                        guzzle_parameters:
+                            headers:
+                                Accept-Language: en
+                selenium2:
+                    selenium2:
+                        wd_host: "http://127.0.0.1:4444/wd/hub"
+
+

@@ -1,0 +1,30 @@
+{
+  "name": "datinglibre-ui",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "bootstrap-select": "^1.13.18",
+    "cropperjs": "^1.5.12",
+    "jquery": "^3.6.0",
+    "jquery-cropper": "^1.0.1",
+    "popper": "^1.0.1",
+    "popper.js": "^1.16.1",
+    "q": "^1.5.1"
+  },
+  "devDependencies": {
+    "css-loader": "^6.3.0",
+    "expose-loader": "^3.0.0",
+    "mini-css-extract-plugin": "^2.3.0",
+    "style-loader": "^3.3.0",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "DatingLibre",
+  "license": "MIT"
+}

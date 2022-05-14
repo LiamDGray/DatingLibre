@@ -1,0 +1,2 @@
+imports:
+  - { resource: "@DatingLibreAppBundle/Resources/config/services_test.yaml" }
