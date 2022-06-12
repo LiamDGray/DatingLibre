@@ -1,5 +1,6 @@
 Feature: As an administrator, I can view emails sent to the user
 
+    @email
     Scenario: An administrator I can view emails sent to the user
         When I am on "/en/register"
         And I follow "Register"
@@ -18,7 +19,7 @@ Feature: As an administrator, I can view emails sent to the user
         And I follow "Emails"
         Then I should see "Signup"
 
-    @search
+    @email
     Scenario: As an administrator, I can see where a user has no emails
         Given the following profiles exist:
             | email                    | attributes    | requirements | city   | age |

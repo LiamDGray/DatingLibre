@@ -319,12 +319,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/datinglibre-app-bundle.git",
-                "reference": "524cab031cad38d2762cfc8b9942c3ebded8c240"
+                "reference": "10eefd997c640a60a14f03cd261391d286d4397b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/524cab031cad38d2762cfc8b9942c3ebded8c240",
-                "reference": "524cab031cad38d2762cfc8b9942c3ebded8c240",
+                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/10eefd997c640a60a14f03cd261391d286d4397b",
+                "reference": "10eefd997c640a60a14f03cd261391d286d4397b",
                 "shasum": ""
             },
             "require": {
@@ -393,7 +393,7 @@
             "support": {
                 "source": "https://github.com/datinglibre/datinglibre-app-bundle/tree/master"
             },
-            "time": "2022-06-11T20:40:48+00:00"
+            "time": "2022-06-12T19:08:14+00:00"
         },
         {
             "name": "datinglibre/datinglibre-manual-subscription-bundle",

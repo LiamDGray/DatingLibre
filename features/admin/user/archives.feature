@@ -29,7 +29,7 @@ Feature:
        Given an administrator exists with email "admin@example.com"
        And I am logged in with "admin@example.com"
        And I am on "/en/admin/user/archives"
-       Then I should see "No recently deleted users"
+       Then I should see "No user archives"
 
    @archives
    Scenario: An administrator can search for an archive by email
