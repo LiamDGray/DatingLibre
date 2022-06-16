@@ -182,16 +182,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.225.2",
+            "version": "3.225.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f846724ad842916061127d20da4fe4e129f7d4b8"
+                "reference": "09b404c6b80b9c31be15fa245e647a2f9fb5e733"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f846724ad842916061127d20da4fe4e129f7d4b8",
-                "reference": "f846724ad842916061127d20da4fe4e129f7d4b8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/09b404c6b80b9c31be15fa245e647a2f9fb5e733",
+                "reference": "09b404c6b80b9c31be15fa245e647a2f9fb5e733",
                 "shasum": ""
             },
             "require": {
@@ -199,7 +199,7 @@
                 "ext-json": "*",
                 "ext-pcre": "*",
                 "ext-simplexml": "*",
-                "guzzlehttp/guzzle": "^5.3.3 || ^6.5.6 || ^7.4.3",
+                "guzzlehttp/guzzle": "^5.3.3 || ^6.2.1 || ^7.0",
                 "guzzlehttp/promises": "^1.4.0",
                 "guzzlehttp/psr7": "^1.7.0 || ^2.1.1",
                 "mtdowling/jmespath.php": "^2.6",
@@ -267,22 +267,22 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.225.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.225.5"
             },
-            "time": "2022-06-10T19:03:26+00:00"
+            "time": "2022-06-15T19:35:13+00:00"
         },
         {
             "name": "datinglibre/datinglibre-app-api",
-            "version": "v1.0.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/datinglibre-app-api.git",
-                "reference": "737b8e683442fbff2321b2fbf87b8018cdbba686"
+                "reference": "48907d237fda776cafd4a869e467997235674315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-api/zipball/737b8e683442fbff2321b2fbf87b8018cdbba686",
-                "reference": "737b8e683442fbff2321b2fbf87b8018cdbba686",
+                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-api/zipball/48907d237fda776cafd4a869e467997235674315",
+                "reference": "48907d237fda776cafd4a869e467997235674315",
                 "shasum": ""
             },
             "require": {
@@ -308,10 +308,9 @@
             ],
             "description": "DatingLibre App API",
             "support": {
-                "issues": "https://github.com/datinglibre/datinglibre-app-api/issues",
-                "source": "https://github.com/datinglibre/datinglibre-app-api/tree/v1.0.0"
+                "source": "https://github.com/datinglibre/datinglibre-app-api/tree/v1.1.1"
             },
-            "time": "2022-05-14T06:28:06+00:00"
+            "time": "2022-06-16T16:07:38+00:00"
         },
         {
             "name": "datinglibre/datinglibre-app-bundle",
@@ -319,18 +318,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/datinglibre-app-bundle.git",
-                "reference": "2fc53c60b946220969544ce5c60b18ec669e40db"
+                "reference": "1ed4986e334a57cfaf9a9f94cb8d947eaeb63d25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/2fc53c60b946220969544ce5c60b18ec669e40db",
-                "reference": "2fc53c60b946220969544ce5c60b18ec669e40db",
+                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/1ed4986e334a57cfaf9a9f94cb8d947eaeb63d25",
+                "reference": "1ed4986e334a57cfaf9a9f94cb8d947eaeb63d25",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "^3.174.3",
-                "datinglibre/datinglibre-app-api": "1.0.0",
-                "datinglibre/datinglibre-manual-subscription-bundle": "1.0.*",
+                "datinglibre/datinglibre-app-api": "^1.0",
+                "datinglibre/datinglibre-manual-subscription-bundle": "^1.0",
                 "doctrine/annotations": "^1.0",
                 "doctrine/doctrine-bundle": "^2.1",
                 "doctrine/doctrine-migrations-bundle": "^3.0",
@@ -393,24 +392,24 @@
             "support": {
                 "source": "https://github.com/datinglibre/datinglibre-app-bundle/tree/master"
             },
-            "time": "2022-06-13T08:50:33+00:00"
+            "time": "2022-06-16T16:23:34+00:00"
         },
         {
             "name": "datinglibre/datinglibre-manual-subscription-bundle",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/datinglibre-manual-subscription-bundle.git",
-                "reference": "569641b0a35f050be2bdba6c8e02e0899512e07b"
+                "reference": "e65ad672b72c02fb9cdc2f7836a8c43bcab3af5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/datinglibre-manual-subscription-bundle/zipball/569641b0a35f050be2bdba6c8e02e0899512e07b",
-                "reference": "569641b0a35f050be2bdba6c8e02e0899512e07b",
+                "url": "https://api.github.com/repos/datinglibre/datinglibre-manual-subscription-bundle/zipball/e65ad672b72c02fb9cdc2f7836a8c43bcab3af5b",
+                "reference": "e65ad672b72c02fb9cdc2f7836a8c43bcab3af5b",
                 "shasum": ""
             },
             "require": {
-                "datinglibre/datinglibre-app-api": "1.0.*",
+                "datinglibre/datinglibre-app-api": "^1.0",
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "php": "^8.1",
@@ -447,9 +446,9 @@
             "description": "DatingLibre Manual Subscription Bundle",
             "support": {
                 "issues": "https://github.com/datinglibre/datinglibre-manual-subscription-bundle/issues",
-                "source": "https://github.com/datinglibre/datinglibre-manual-subscription-bundle/tree/v1.0.0"
+                "source": "https://github.com/datinglibre/datinglibre-manual-subscription-bundle/tree/v1.0.2"
             },
-            "time": "2022-05-14T06:33:19+00:00"
+            "time": "2022-06-16T15:28:39+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -4287,16 +4286,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.19.1",
+            "version": "v1.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "9c612796a68de4196fff4bc159db5071aa62d428"
+                "reference": "d1a692369be53445af6e391170b509d7f5d026cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/9c612796a68de4196fff4bc159db5071aa62d428",
-                "reference": "9c612796a68de4196fff4bc159db5071aa62d428",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d1a692369be53445af6e391170b509d7f5d026cf",
+                "reference": "d1a692369be53445af6e391170b509d7f5d026cf",
                 "shasum": ""
             },
             "require": {
@@ -4332,7 +4331,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.19.1"
+                "source": "https://github.com/symfony/flex/tree/v1.19.2"
             },
             "funding": [
                 {
@@ -4348,7 +4347,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-06T15:14:39+00:00"
+            "time": "2022-06-14T21:13:39+00:00"
         },
         {
             "name": "symfony/form",
