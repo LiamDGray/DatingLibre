@@ -318,12 +318,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/datinglibre-app-bundle.git",
-                "reference": "ae3bafbbbe301768a914722824fbb9decd7541d9"
+                "reference": "f89677461c14d94dbe4037470bbdb84925f913f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/ae3bafbbbe301768a914722824fbb9decd7541d9",
-                "reference": "ae3bafbbbe301768a914722824fbb9decd7541d9",
+                "url": "https://api.github.com/repos/datinglibre/datinglibre-app-bundle/zipball/f89677461c14d94dbe4037470bbdb84925f913f5",
+                "reference": "f89677461c14d94dbe4037470bbdb84925f913f5",
                 "shasum": ""
             },
             "require": {
@@ -390,9 +390,9 @@
             ],
             "description": "The core overridable code of DatingLibre",
             "support": {
-                "source": "https://github.com/datinglibre/datinglibre-app-bundle/tree/v2.0.0"
+                "source": "https://github.com/datinglibre/datinglibre-app-bundle/tree/master"
             },
-            "time": "2022-06-19T09:29:21+00:00"
+            "time": "2022-06-19T10:34:45+00:00"
         },
         {
             "name": "datinglibre/datinglibre-manual-subscription-bundle",
