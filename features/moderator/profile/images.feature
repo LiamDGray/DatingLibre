@@ -51,6 +51,7 @@ Feature:
         Then I should see "Accepted"
         And I am on "/en/moderator/images/accepted"
         And I can see an image uploaded by "bristol_blue@example.com"
+        And the response should contain "Moderated by moderator@example.com"
 
     Scenario: As a moderator I can see a list of recently accepted images
         Given the following profiles exist:
@@ -69,6 +70,7 @@ Feature:
         And I follow "Recently accepted"
         And I can see an image uploaded by "bath_yellow@example.com"
         And I can see an image uploaded by "bristol_blue@example.com"
+        And the response should contain "Moderated by moderator@example.com"
 
     Scenario: As a moderator I can see a list of recently rejected images
         Given the following profiles exist:
@@ -87,6 +89,7 @@ Feature:
         And I follow "Recently rejected"
         And I can see an image uploaded by "bristol_blue@example.com"
         And I can see an image uploaded by "bath_yellow@example.com"
+        And the response should contain "Moderated by moderator@example.com"
 
     Scenario: As a moderator I cannot see another moderator's recently rejected images
         Given the following profiles exist:
@@ -103,6 +106,8 @@ Feature:
         And I press "Reject"
         And I follow "Recently rejected"
         Then I can see an image uploaded by "bristol_blue@example.com"
+        Then the response should contain "Moderated by moderator_1@example.com"
+        And the response should not contain "Moderated by moderator_2@example.com"
         And I follow "Logout"
         And I am logged in with "moderator_2@example.com"
         And I am on "/en/moderator/user/images"
@@ -111,6 +116,8 @@ Feature:
         And I follow "Recently rejected"
         Then I can see an image uploaded by "bath_yellow@example.com"
         And I cannot see an image uploaded by "bristol_blue@example.com"
+        And the response should contain "Moderated by moderator_2@example.com"
+        And the response should not contain "Moderated by moderator_1@example.com"
 
     Scenario: As a moderator I can see the latest unmoderated image at random
         Given the following profiles exist:
