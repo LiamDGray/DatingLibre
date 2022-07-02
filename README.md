@@ -2,7 +2,7 @@
 
 [![Workflow status](https://github.com/datinglibre/datinglibre/actions/workflows/datinglibre.yml/badge.svg?branch=master)](https://github.com/datinglibre/DatingLibre/actions)
 
-[DatingLibre](https://datinglibre.com) is an open source white-label dating site platform (implemented as a Symfony bundle). It uses: 
+[DatingLibre](https://datinglibre.com) is an open source white-label dating site platform (implemented as a Symfony bundle). It's considered feature-complete for a minimum viable product. It uses: 
 - `PHP` 8.1,
 - Symfony 5.4 LTS,
 - Ubuntu 22.04 LTS,
